@@ -1,12 +1,10 @@
 import { Component } from '@angular/core';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatButtonModule } from '@angular/material/button';
-import { MatTableModule } from '@angular/material/table';
+import { StudentFormComponent } from "../../components/student-form/student-form.component";
+import { StudentTableComponent } from "../../components/student-table/student-table.component";
 
 @Component({
   selector: 'app-student',
-  imports: [MatInputModule, MatFormFieldModule, MatButtonModule, MatTableModule],
+  imports: [StudentFormComponent, StudentTableComponent],
   templateUrl: './student.component.html',
   styleUrl: './student.component.css'
 })

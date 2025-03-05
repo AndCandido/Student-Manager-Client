@@ -1,0 +1,12 @@
+.main-content{
+  padding: 1.5rem;
+}
+
+.main-content .title {
+  margin-bottom: 15px;
+  font-weight: 400;
+}
+
+.student-form-container {
+  padding: 2rem;
+}

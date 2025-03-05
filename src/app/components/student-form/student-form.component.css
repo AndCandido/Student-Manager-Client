@@ -1,0 +1,25 @@
+.student-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-row {
+  display: flex;
+  gap: 10px;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.form-row-actions {
+  justify-self: flex-end;
+}
+
+button.cancel-button {
+  background-color: #b90621;
+}
+
+button.submit-button {
+  background-color: #05790f;
+}

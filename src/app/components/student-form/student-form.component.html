@@ -1,1 +1,97 @@
-<p>student-form works!</p>
+<form id="student-form" [formGroup]="studentForm" (ngSubmit)="onSubmit()">
+  <input type="hidden" formControlName="id">
+
+  <div class="form-row larger-row">
+    <mat-form-field appearance="outline">
+      <mat-label>Nome</mat-label>
+      <input
+        type="text"
+        matInput
+        formControlName="name"
+      >
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>E-mail</mat-label>
+      <input
+       type="text"
+       matInput
+       formControlName="email"
+      >
+      @if (studentForm.get("email")?.getError("email")) {
+        <mat-error>Insira um E-mail válido</mat-error>
+      }
+    </mat-form-field>
+  </div>
+  <div class="form-row">
+    <mat-form-field appearance="outline">
+      <mat-label>Telefone</mat-label>
+      <input
+        type="tel"
+        matInput
+        formControlName="phoneNumber"
+        inputmode="tel"
+        mask="(00) 0000-0000"
+        placeholder="(00) 0000-0000"
+      >
+
+      @if (studentForm.get("phoneNumber")?.getError("pattern")) {
+        <mat-error>Insira um número de Telefone válido</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Celular</mat-label>
+      <input
+        type="tel"
+        matInput
+        formControlName="cellPhoneNumber"
+        inputmode="tel"
+        mask="(00) 00000-0000"
+        placeholder="(00) 00000-0000"
+      >
+
+
+      @if (studentForm.get("cellPhoneNumber")?.getError("pattern")) {
+        <mat-error>Insira um número de Celular válido</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>CPF</mat-label>
+      <input
+        type="text"
+        matInput
+        formControlName="cpf"
+        inputmode="numeric"
+        mask="000.000.000-00"
+        placeholder="000.000.000-00"
+      >
+
+      @if (studentForm.get("cpf")?.getError("pattern")) {
+        <mat-error>Insira um CPF válido</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Data de Nascimento</mat-label>
+      <input type="date" matInput formControlName="birthDate">
+
+      @if (studentForm.get("birthDate")?.getError("pattern")) {
+        <mat-error>Insira uma Data válida</mat-error>
+      }
+    </mat-form-field>
+  </div>
+
+  <div class="form-row form-row-actions">
+    <button type="reset" class="cancel-button" mat-flat-button>
+      <mat-icon fontIcon="cancel"></mat-icon>
+      Cancelar
+    </button>
+
+    <button type="submit" class="submit-button" mat-flat-button>
+      <mat-icon fontIcon="save"></mat-icon>
+      Adicionar
+    </button>
+  </div>
+</form>
