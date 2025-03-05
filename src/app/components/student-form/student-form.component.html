@@ -33,6 +33,7 @@
         inputmode="tel"
         mask="(00) 0000-0000"
         placeholder="(00) 0000-0000"
+        [dropSpecialCharacters]="false"
       >
 
       @if (studentForm.get("phoneNumber")?.getError("pattern")) {
@@ -49,8 +50,8 @@
         inputmode="tel"
         mask="(00) 00000-0000"
         placeholder="(00) 00000-0000"
+        [dropSpecialCharacters]="false"
       >
-
 
       @if (studentForm.get("cellPhoneNumber")?.getError("pattern")) {
         <mat-error>Insira um número de Celular válido</mat-error>
@@ -66,6 +67,7 @@
         inputmode="numeric"
         mask="000.000.000-00"
         placeholder="000.000.000-00"
+        [dropSpecialCharacters]="false"
       >
 
       @if (studentForm.get("cpf")?.getError("pattern")) {
