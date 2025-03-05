@@ -28,7 +28,7 @@ export class StudentFormComponent {
 
   onSubmit() {
     if(this.studentForm.invalid) return
-    if(this.studentForm.get("id")) return this.updateStudent()
+    if(this.studentForm.get("id")?.value) return this.updateStudent()
     this.studentService.saveStudent(this.studentForm.value).subscribe()
   }
 
