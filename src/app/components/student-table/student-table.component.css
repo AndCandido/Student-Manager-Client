@@ -1,0 +1,45 @@
+.students-table {
+  border-collapse: collapse;
+}
+
+.students-table th {
+  background-color: #d8d8d8;
+}
+
+.students-table tr:nth-child(odd) {
+  background-color: #34879217;
+}
+
+.students-table th, .students-table td {
+  border: 1px solid #000;
+}
+
+.students-table .actions-container  {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.actions-column {
+  width: 0px;
+}
+
+.students-table .action-buttons {
+  background-color: transparent;
+  padding: 0 10px;
+  border: 0;
+  font-size: 3rem;
+  cursor: pointer;
+}
+
+.students-table .action-buttons .edit-icon {
+  color: #c5700e;
+}
+.students-table .action-buttons .delete-icon {
+  color: #971309;
+}
+
+.mat-mdc-unelevated-button>.mat-icon{
+  padding: 0;
+  margin: 0;
+}

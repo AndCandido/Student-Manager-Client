@@ -1,0 +1,9 @@
+.dialog-content {
+  padding: 20px;
+}
+
+.errors-list {
+  background-color: rgba(187, 0, 0, 0.11);
+  padding: 5px 30px 5px 30px;
+  border-radius: 10px;
+}

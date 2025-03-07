@@ -86,12 +86,12 @@
   </div>
 
   <div class="form-row form-row-actions">
-    <button type="reset" class="cancel-button" mat-flat-button>
+    <button type="reset" class="cancel-button" mat-flat-button (click)="isUpdatingStudent() ? cancelUpdating() : null">
       <mat-icon fontIcon="cancel"></mat-icon>
       Cancelar
     </button>
 
-    <button type="submit" class="submit-button" mat-flat-button>
+    <button type="submit" [class]="isUpdatingStudent() ? 'update-button' : 'save-button' " mat-flat-button>
       <mat-icon fontIcon="save"></mat-icon>
       Adicionar
     </button>

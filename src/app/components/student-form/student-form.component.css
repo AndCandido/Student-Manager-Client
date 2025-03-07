@@ -20,6 +20,10 @@ button.cancel-button {
   background-color: #b90621;
 }
 
-button.submit-button {
+button.save-button {
   background-color: #05790f;
+}
+
+button.update-button {
+  background-color: #dabc13;
 }

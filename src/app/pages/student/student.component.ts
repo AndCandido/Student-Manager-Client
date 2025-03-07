@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, signal, WritableSignal } from '@angular/core';
 import { StudentFormComponent } from "../../components/student-form/student-form.component";
 import { StudentTableComponent } from "../../components/student-table/student-table.component";
+import { StudentModel } from '../../models/StudentModel';
 
 @Component({
   selector: 'app-student',
@@ -9,5 +10,4 @@ import { StudentTableComponent } from "../../components/student-table/student-ta
   styleUrl: './student.component.css'
 })
 export class StudentComponent {
-
 }
