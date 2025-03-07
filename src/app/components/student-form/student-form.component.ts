@@ -51,7 +51,11 @@ export class StudentFormComponent implements OnInit {
   saveStudent() {
     this.studentService.saveStudent(this.studentForm.value).subscribe({
       next: () => this.studentStateService.emitRefreshStudents(),
-      error: (err: HttpErrorResponse) => this.showErrors(err.error as ApiResponseError)
+      error: (err: HttpErrorResponse) => {
+        if(err.status == 0)
+          return this.openDialogErrors("Erro ao adicionar aluno", ["Sem conexão com o servidor"])
+        this.showErrors(err.error as ApiResponseError)
+      }
     })
   }
 
@@ -60,15 +64,23 @@ export class StudentFormComponent implements OnInit {
   }
 
   openDialogErrors(title: string, errors: string[]) {
+    this.matDialog.closeAll()
     this.matDialog.open(DialogErrorsComponent, {
       data: { title, errors },
     });
   }
 
   updateStudent() {
-    this.studentService.updateStudent(this.studentForm.value).subscribe(() => {
-      this.studentStateService.emitRefreshStudents();
-      this.cancelUpdating()
+    this.studentService.updateStudent(this.studentForm.value).subscribe({
+      next: () => {
+        this.studentStateService.emitRefreshStudents()
+        this.cancelUpdating()
+      },
+      error: (err: HttpErrorResponse) => {
+        if(err.status == 0)
+          return this.openDialogErrors("Erro ao atualizar aluno", ["Sem conexão com o servidor"])
+        this.showErrors(err.error as ApiResponseError)
+      }
     })
   }
 

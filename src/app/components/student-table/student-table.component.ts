@@ -5,6 +5,8 @@ import { StudentService } from '../../services/student.service';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { StudentsStateService } from '../../services/students-state.service';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogErrorsComponent } from '../dialog-errors/dialog-errors.component';
 
 @Component({
   selector: 'app-student-table',
@@ -19,7 +21,8 @@ export class StudentTableComponent implements OnInit {
 
   constructor(
     private readonly studentService: StudentService,
-    private readonly studentStateService: StudentsStateService
+    private readonly studentStateService: StudentsStateService,
+    private readonly matDialog: MatDialog
   ) {
     this.displayedColumns = [
       "name",
@@ -34,7 +37,7 @@ export class StudentTableComponent implements OnInit {
 
   ngOnInit(): void {
     this.refrashStudentsData()
-    this.studentStateService.refreshStudentsListEvent.subscribe(() => {
+    this.studentStateService.subscribeOnRefreshStudents(() => {
       this.refrashStudentsData();
     })
   }
@@ -53,7 +56,14 @@ export class StudentTableComponent implements OnInit {
   refrashStudentsData() {
     this.studentService.getAllStudents().subscribe({
       next: (value) => this.studentsData.set(value),
-      error: () => window.alert("Error ao Carregar os Alunos")
+      error: () => this.openDialogErrors("Erro ao carregar alunos", ["Sem conexão com o servidor"])
     })
+  }
+
+  openDialogErrors(title: string, errors: string[]) {
+    this.matDialog.closeAll()
+    this.matDialog.open(DialogErrorsComponent, {
+      data: { title, errors },
+    });
   }
 }
