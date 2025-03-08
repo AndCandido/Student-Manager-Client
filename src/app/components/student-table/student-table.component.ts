@@ -37,7 +37,7 @@ export class StudentTableComponent implements OnInit {
 
   ngOnInit(): void {
     this.refrashStudentsData()
-    this.studentStateService.subscribeOnRefreshStudents(() => {
+    this.studentStateService.refreshStudentsListEvent.subscribe(() => {
       this.refrashStudentsData();
     })
   }

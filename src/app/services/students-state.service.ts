@@ -22,8 +22,4 @@ export class StudentsStateService {
   emitRefreshStudents() {
     this.refreshStudentsListEvent.emit();
   }
-
-  subscribeOnRefreshStudents(cb: () => void) {
-    this.refreshStudentsListEvent.subscribe(cb())
-  }
 }
