@@ -93,13 +93,13 @@ export class StudentFormComponent implements OnInit {
 
   instanceStudentForm() {
     this.studentForm = this.formBuilder.group({
-      id: [""],
-      name: [ "", Validators.required ],
-      email: ["", [ Validators.required, Validators.email ]],
-      phoneNumber: ["", Validators.pattern("^\\(?\\d{2}\\)?\\s?(?:9\\d{4}|\\d{4})-?\\d{4}$")],
-      cellPhoneNumber: ["" , Validators.pattern("^\\(?\\d{2}\\)?\\s?(?:9\\d{4}|\\d{5})-?\\d{4}$")],
-      cpf: ["", Validators.pattern("^\\d{3}\\.?\\d{3}\\.?\\d{3}-?\\d{2}$")],
-      birthDate: ["", Validators.pattern( /^(19|20)\d{2}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/)]
+      id: [null],
+      name: [ null, Validators.required ],
+      email: [null, [ Validators.required, Validators.email ]],
+      phoneNumber: [null, Validators.pattern(/^\(\d{2}\) \d{4}-\d{4}$/)],
+      cellPhoneNumber: [null , Validators.pattern(/^\(\d{2}\) \d{4,5}-\d{4}$/)],
+      cpf: [null, Validators.pattern(/^\d{3}\.?\d{3}\.?\d{3}-?\d{2}$/)],
+      birthDate: [null, Validators.pattern(/^(19|20)\d{2}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/)]
     })
   }
 }
