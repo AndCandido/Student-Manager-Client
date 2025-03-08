@@ -3,11 +3,11 @@
 }
 
 .students-table th {
-  background-color: #d8d8d8;
+  background-color: #bebebe;
 }
 
-.students-table tr:nth-child(odd) {
-  background-color: #34879217;
+.students-table tr:nth-child(even) {
+  background-color: #8f8f8f17;
 }
 
 .students-table th, .students-table td {

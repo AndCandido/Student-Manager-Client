@@ -11,6 +11,7 @@ import { ApiResponseError } from '../../types/api';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogErrorsComponent } from '../dialog-errors/dialog-errors.component';
 import { HttpErrorResponse } from '@angular/common/http';
+import { StudentModel } from '../../models/StudentModel';
 
 @Component({
   selector: 'app-student-form',
@@ -87,6 +88,7 @@ export class StudentFormComponent implements OnInit {
   cancelUpdating() {
     this.studentStateService.clearStudentToUpdate()
     this.isUpdatingStudent.set(false)
+    this.studentForm.reset()
   }
 
   instanceStudentForm() {
