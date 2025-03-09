@@ -1,0 +1,12 @@
+<mat-card [class]="options?.type === 'error' ? 'card-error' : 'card-success'" appearance="outlined">
+  <mat-card-content>
+    {{ options?.title }}
+    @if(options?.errors) {
+      <ul class="errors-list">
+        @for (error of options?.errors; track $index) {
+          <li>{{error}}</li>
+        }
+      </ul>
+    }
+  </mat-card-content>
+</mat-card>

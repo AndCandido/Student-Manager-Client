@@ -1,0 +1,15 @@
+.dialog-content {
+  padding: 20px;
+}
+
+.card-success {
+  background-color: rgba(0, 187, 25, 0.11);
+}
+
+.card-error {
+  background-color: rgba(187, 0, 0, 0.11);
+}
+
+.errors-list {
+  padding: 0 20px 0 20px;
+}

@@ -7,16 +7,18 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { NgxMaskDirective } from "ngx-mask"
 import { StudentService } from '../../services/student.service';
 import { StudentsStateService } from '../../services/students-state.service';
-import { ApiResponseError } from '../../types/api';
+import { ApiResponseError } from '../../types/api.types';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogErrorsComponent } from '../dialog-errors/dialog-errors.component';
 import { HttpErrorResponse } from '@angular/common/http';
+import { MessageCardComponent } from "../message-card/message-card.component";
+import { MessageCardOptions } from '../../types/message-card.types';
 import { StudentModel } from '../../models/StudentModel';
 
 @Component({
   selector: 'app-student-form',
   standalone: true,
-  imports: [ MatInputModule, MatFormFieldModule, MatButtonModule, ReactiveFormsModule, MatIconModule, NgxMaskDirective ],
+  imports: [MatInputModule, MatFormFieldModule, MatButtonModule, ReactiveFormsModule, MatIconModule, NgxMaskDirective, MessageCardComponent],
   templateUrl: './student-form.component.html',
   styleUrl: './student-form.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -24,6 +26,7 @@ import { StudentModel } from '../../models/StudentModel';
 export class StudentFormComponent implements OnInit {
   studentForm!: FormGroup;
   isUpdatingStudent = signal(false);
+  messageCardOptions = signal<MessageCardOptions | null>(null);
 
   constructor(
     private readonly formBuilder: FormBuilder,
@@ -50,18 +53,30 @@ export class StudentFormComponent implements OnInit {
   }
 
   saveStudent() {
-    this.studentService.saveStudent(this.studentForm.value).subscribe({
-      next: () => this.studentStateService.emitRefreshStudents(),
-      error: (err: HttpErrorResponse) => {
-        if(err.status == 0)
-          return this.openDialogErrors("Erro ao adicionar aluno", ["Sem conexão com o servidor"])
-        this.showErrors(err.error as ApiResponseError)
-      }
+    const studentToSave = StudentModel.formToModel(this.studentForm.value)
+    this.studentService.saveStudent(studentToSave).subscribe({
+      next: () => this.saveStudentSuccess(studentToSave.name!),
+      error: (err: HttpErrorResponse) => this.saveStudentFailure(err)
     })
   }
 
-  showErrors(errors: ApiResponseError) {
-    this.openDialogErrors("Erro ao adicionar o Aluno", errors.errors)
+  saveStudentSuccess(studentName: string) {
+    this.studentStateService.emitRefreshStudents()
+    this.messageCardOptions.set({
+      type: "success",
+      title: `Aluno ${studentName} Salvo com sucesso`
+    })
+    this.studentForm.reset();
+  }
+
+  saveStudentFailure(err: HttpErrorResponse) {
+    if(err.status == 0)
+      return this.openDialogErrors("Erro ao adicionar aluno", ["Sem conexão com o servidor"])
+    this.messageCardOptions.set({
+      type: "error",
+      title: `Falha ao Salvar aluno`,
+      errors: (err.error as ApiResponseError).errors
+    })
   }
 
   openDialogErrors(title: string, errors: string[]) {
@@ -72,16 +87,29 @@ export class StudentFormComponent implements OnInit {
   }
 
   updateStudent() {
-    this.studentService.updateStudent(this.studentForm.value).subscribe({
-      next: () => {
-        this.studentStateService.emitRefreshStudents()
-        this.cancelUpdating()
-      },
-      error: (err: HttpErrorResponse) => {
-        if(err.status == 0)
-          return this.openDialogErrors("Erro ao atualizar aluno", ["Sem conexão com o servidor"])
-        this.showErrors(err.error as ApiResponseError)
-      }
+    const studentToUpdate = StudentModel.formToModel(this.studentForm.value)
+    this.studentService.updateStudent(studentToUpdate).subscribe({
+      next: () => this.updateStudentSuccess(studentToUpdate.name!),
+      error: (err: HttpErrorResponse) => this.updateStudentFailure(err)
+    })
+  }
+
+  updateStudentSuccess(studentName: string) {
+    this.studentStateService.emitRefreshStudents()
+    this.cancelUpdating()
+    this.messageCardOptions.set({
+      type: "success",
+      title: `Aluno ${studentName} Atualizado com sucesso`
+    })
+  }
+
+  updateStudentFailure(err: HttpErrorResponse) {
+    if(err.status == 0)
+      return this.openDialogErrors("Erro ao atualizar aluno", ["Sem conexão com o servidor"])
+    this.messageCardOptions.set({
+      type: "error",
+      title: `Falha ao Atualizar aluno`,
+      errors: (err.error as ApiResponseError).errors
     })
   }
 
@@ -93,13 +121,13 @@ export class StudentFormComponent implements OnInit {
 
   instanceStudentForm() {
     this.studentForm = this.formBuilder.group({
-      id: [null],
-      name: [ null, Validators.required ],
-      email: [null, [ Validators.required, Validators.email ]],
-      phoneNumber: [null, Validators.pattern(/^\(\d{2}\) \d{4}-\d{4}$/)],
-      cellPhoneNumber: [null , Validators.pattern(/^\(\d{2}\) \d{4,5}-\d{4}$/)],
-      cpf: [null, Validators.pattern(/^\d{3}\.?\d{3}\.?\d{3}-?\d{2}$/)],
-      birthDate: [null, Validators.pattern(/^(19|20)\d{2}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/)]
+      id: [""],
+      name: [ "", Validators.required ],
+      email: ["", [ Validators.required, Validators.email ]],
+      phoneNumber: ["", Validators.pattern(/^\(\d{2}\) \d{4}-\d{4}$/)],
+      cellPhoneNumber: ["" , Validators.pattern(/^\(\d{2}\) \d{4,5}-\d{4}$/)],
+      cpf: ["", Validators.pattern(/^\d{3}\.?\d{3}\.?\d{3}-?\d{2}$/)],
+      birthDate: ["", Validators.pattern(/^(19|20)\d{2}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/)]
     })
   }
 }
