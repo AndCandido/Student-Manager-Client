@@ -7,6 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { StudentsStateService } from '../../services/students-state.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogErrorsComponent } from '../dialog-errors/dialog-errors.component';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-student-table',
@@ -50,14 +51,21 @@ export class StudentTableComponent implements OnInit {
     const deleteConfirmed = window.confirm("Tem certeza que deseja excluir esse aluno?")
     if(deleteConfirmed) this.studentService.deleteStudent(id).subscribe({
       complete: () => this.refrashStudentsData(),
+      error: (err: HttpErrorResponse) => {
+        if(err.status == 0) this.openDialogNoConnectionServerError()
+      },
     });
   }
 
   refrashStudentsData() {
     this.studentService.getAllStudents().subscribe({
       next: (value) => this.studentsData.set(value),
-      error: () => this.openDialogErrors("Erro ao carregar alunos", ["Sem conexão com o servidor"])
+      error: () => this.openDialogNoConnectionServerError()
     })
+  }
+
+  openDialogNoConnectionServerError() {
+    this.openDialogErrors("Erro ao conectar com o servidor", ["Sem conexão com o servidor"])
   }
 
   openDialogErrors(title: string, errors: string[]) {
