@@ -74,4 +74,8 @@ export class StudentTableComponent implements OnInit {
       data: { title, errors },
     });
   }
+
+  isRowUpdating(row: StudentModel) {
+    return this.studentStateService.studentToUpdate().id === row.id;
+  }
 }
