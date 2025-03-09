@@ -16,6 +16,7 @@ export class StudentModel {
     this.phoneNumber = normalizeString(phoneNumber);
     this.cellPhoneNumber = normalizeString(cellPhoneNumber);
     this.cpf = normalizeString(cpf);
+    this.birthDate = birthDate;
   }
 
   static formToModel(student: StudentModel): StudentModel {
@@ -26,6 +27,7 @@ export class StudentModel {
       normalizeString(student.phoneNumber),
       normalizeString(student.cellPhoneNumber),
       normalizeString(student.cpf),
+      student.birthDate
     );
   }
 }
