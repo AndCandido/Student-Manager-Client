@@ -1,30 +1,36 @@
-<table mat-table [dataSource]="studentsData()" class="students-table">
+<div>
+  <mat-form-field appearance="outline">
+    <mat-label>Filtrar por nome</mat-label>
+    <input type="text" matInput (keyup)="applyFilter($event)">
+  </mat-form-field>
+</div>
 
+<table mat-table [dataSource]="studentsData()" class="students-table" matSort>
   <ng-container matColumnDef="name">
-    <th mat-header-cell *matHeaderCellDef> Name </th>
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
     <td mat-cell *matCellDef="let element"> {{element.name}} </td>
   </ng-container>
 
   <ng-container matColumnDef="email">
-    <th mat-header-cell *matHeaderCellDef> E-mail </th>
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> E-mail </th>
     <td mat-cell *matCellDef="let element"> {{element.email}} </td>
   </ng-container>
   <ng-container matColumnDef="cellPhoneNumber">
-    <th mat-header-cell *matHeaderCellDef> Celular </th>
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Celular </th>
     <td mat-cell *matCellDef="let element"> {{element.cellPhoneNumber}} </td>
   </ng-container>
 
   <ng-container matColumnDef="phoneNumber">
-    <th mat-header-cell *matHeaderCellDef> Telefone </th>
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Telefone </th>
     <td mat-cell *matCellDef="let element"> {{element.phoneNumber}} </td>
   </ng-container>
 
   <ng-container matColumnDef="cpf">
-    <th mat-header-cell *matHeaderCellDef> CPF </th>
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> CPF </th>
     <td mat-cell *matCellDef="let element"> {{element.cpf}} </td>
   </ng-container>
   <ng-container matColumnDef="birthDate">
-    <th mat-header-cell *matHeaderCellDef> Data de Nascimento </th>
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> Data de Nascimento </th>
     <td mat-cell *matCellDef="let element"> {{element.birthDate}} </td>
   </ng-container>
 
@@ -47,3 +53,9 @@
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns;" [class.row-updating]="isRowUpdating(row)"></tr>
 </table>
+
+<mat-paginator
+ [length]="100"
+ [pageSize]="7"
+ [pageSizeOptions]="[5, 7, 10, 25, 50, 100]">
+</mat-paginator>

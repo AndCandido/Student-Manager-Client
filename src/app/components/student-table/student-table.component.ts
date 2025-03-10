@@ -1,5 +1,5 @@
-import { Component, OnInit, signal, WritableSignal } from '@angular/core';
-import { MatTableModule } from '@angular/material/table';
+import { AfterViewInit, Component, OnInit, signal, ViewChild, WritableSignal } from '@angular/core';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { StudentModel } from '../../models/StudentModel';
 import { StudentService } from '../../services/student.service';
 import { MatIconModule } from '@angular/material/icon';
@@ -8,17 +8,29 @@ import { StudentsStateService } from '../../services/students-state.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogErrorsComponent } from '../dialog-errors/dialog-errors.component';
 import { HttpErrorResponse } from '@angular/common/http';
+import { MatSort, MatSortModule } from '@angular/material/sort';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-student-table',
   standalone: true,
-  imports: [MatTableModule, MatIconModule, MatButtonModule],
+  imports: [MatTableModule, MatIconModule, MatButtonModule, MatSortModule, MatPaginatorModule, MatFormFieldModule, MatInputModule ],
   templateUrl: './student-table.component.html',
   styleUrl: './student-table.component.css'
 })
-export class StudentTableComponent implements OnInit {
-  studentsData: WritableSignal<StudentModel[]> = signal([]);
+export class StudentTableComponent implements OnInit, AfterViewInit {
+  studentsData: WritableSignal<MatTableDataSource<StudentModel>> = signal(new MatTableDataSource());
   displayedColumns!: string[];
+
+  @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
+  ngAfterViewInit() {
+    this.studentsData().sort = this.sort;
+    this.studentsData().paginator = this.paginator;
+  }
 
   constructor(
     private readonly studentService: StudentService,
@@ -26,13 +38,7 @@ export class StudentTableComponent implements OnInit {
     private readonly matDialog: MatDialog
   ) {
     this.displayedColumns = [
-      "name",
-      "email",
-      "cellPhoneNumber",
-      "phoneNumber",
-      "cpf",
-      "birthDate",
-      "actions"
+      "name", "email", "cellPhoneNumber", "phoneNumber", "cpf", "birthDate", "actions"
     ]
   }
 
@@ -41,6 +47,13 @@ export class StudentTableComponent implements OnInit {
     this.studentStateService.refreshStudentsListEvent.subscribe(() => {
       this.refrashStudentsData();
     })
+  }
+
+  applyFilter(event: Event) {
+    let value = (event.target as HTMLInputElement).value
+    value = value.trim();
+    value = value.toLowerCase();
+    this.studentsData().filter = value;
   }
 
   updateStudent(student: StudentModel) {
@@ -59,7 +72,7 @@ export class StudentTableComponent implements OnInit {
 
   refrashStudentsData() {
     this.studentService.getAllStudents().subscribe({
-      next: (value) => this.studentsData.set(value),
+      next: (value) => this.studentsData().data = value,
       error: () => this.openDialogNoConnectionServerError()
     })
   }
